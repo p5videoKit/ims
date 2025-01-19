@@ -1,43 +1,57 @@
 // https://editor.p5js.org/p5name/sketches/TU9CrJ1di
 // ims noise inst
 
-let inc = 0.001;
-// let inc = 0.02;
-let start = 0;
-let rot = 0;
-// let rotDelta = 0.0;
-let rotDelta = 0.2;
-let incAccel = 6;
-// let incAccel = 2;
 let my = {};
 
 function setup() {
   my.canv = createCanvas(windowWidth, windowHeight);
+  my.lineNoise = LineNoise();
 }
 
 function draw() {
-  background(0,10);
-  
-  translate(width/2, height/2)
-  rotate(radians(rot))
-  rot =  (rot + rotDelta) ;
-  stroke(255);
-  noFill();
-  beginShape();
-  let xoff = start;
-  for (let x = -width; x < width; x++) {
-    stroke(255);
-    // let y = random(height);
-    let y = (noise(xoff) - 0.5) * height;
-    vertex(x, y);
-    
-    xoff += inc;
-  }
-  endShape();
-  
-  start += inc * incAccel;
+  background(0, 10);
+
+  my.lineNoise.draw();
 }
 
+function LineNoise() {
+  let inc = 0.001;
+  // let inc = 0.02;
+  let start = 0;
+  let rot = 0;
+  // let rotDelta = 0.0;
+  let rotDelta = 0.2;
+  let incAccel = 6;
+  // let incAccel = 2;
+
+  function draw() {
+    push();
+    translate(width / 2, height / 2);
+    rotate(radians(rot));
+    rot = rot + rotDelta;
+    stroke(255);
+    noFill();
+    beginShape();
+    let xoff = start;
+    for (let x = -width; x < width; x++) {
+      stroke(255);
+      // let y = random(height);
+      let y = (noise(xoff) - 0.5) * height;
+      vertex(x, y);
+
+      xoff += inc;
+    }
+    endShape();
+
+    start += inc * incAccel;
+    pop();
+  }
+  return { draw };
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
+}
 
 // Graphing 1D Perlin Noise (1D Noise Graph)
 // The Coding Train / Daniel Shiffman
