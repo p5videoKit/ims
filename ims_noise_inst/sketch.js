@@ -5,7 +5,7 @@ let my = {};
 
 function setup() {
   my.canv = createCanvas(windowWidth, windowHeight);
-  my.lineNoise = LineNoise();
+  my.lineNoise = new LineNoise();
 }
 
 function draw() {
@@ -14,39 +14,46 @@ function draw() {
   my.lineNoise.draw();
 }
 
-function LineNoise() {
-  let inc = 0.001;
-  // let inc = 0.02;
-  let start = 0;
-  let rot = 0;
-  // let rotDelta = 0.0;
-  let rotDelta = 0.2;
-  let incAccel = 6;
-  // let incAccel = 2;
+// { inc, start, rot, rotDelta, incAccel }
+class LineNoise {
+  constructor(props) {
+    // default properties
+    let d = {};
+    d.inc = 0.001;
+    // d. inc = 0.02;
+    d.start = 0;
+    d.rot = 0;
+    // d. rotDelta = 0.0;
+    d.rotDelta = 0.2;
+    d.incAccel = 6;
+    // d. incAccel = 2;
+    Object.assign(this, d, props);
+  }
 
-  function draw() {
+  draw() {
     push();
+
     translate(width / 2, height / 2);
-    rotate(radians(rot));
-    rot = rot + rotDelta;
+    rotate(radians(this.rot));
+    this.rot = this.rot + this.rotDelta;
     stroke(255);
     noFill();
     beginShape();
-    let xoff = start;
+    let xoff = this.start;
     for (let x = -width; x < width; x++) {
       stroke(255);
       // let y = random(height);
       let y = (noise(xoff) - 0.5) * height;
       vertex(x, y);
 
-      xoff += inc;
+      xoff += this.inc;
     }
     endShape();
 
-    start += inc * incAccel;
+    this.start += this.inc * this.incAccel;
+
     pop();
   }
-  return { draw };
 }
 
 function windowResized() {
