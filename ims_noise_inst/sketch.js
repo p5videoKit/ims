@@ -3,31 +3,43 @@
 
 let my = {};
 
+let alphaRed = [255, 0, 0, 80];
+let alphaGreen = [0, 255, 0, 80];
+let alphaGold = [255, 214, 0, 80];
+
 function setup() {
   my.canv = createCanvas(windowWidth, windowHeight);
-  my.lineNoise = new LineNoise();
+  // my.ln1 = new LineNoise();
+  my.ln2 = new LineNoise({ start: 10000, rot: 45, color: alphaRed });
+  my.ln3 = new LineNoise({ start: 30000, rot: 90, color: alphaGreen });
+  my.ln4 = new LineNoise({ start: 40000, rot: 180, color: alphaGold });
 }
 
 function draw() {
   background(0, 10);
+  noFill();
 
-  my.lineNoise.draw();
+  my.ln1?.draw();
+  my.ln2.draw();
+  my.ln3.draw();
+  my.ln4.draw();
 }
 
 // { inc, start, rot, rotDelta, incAccel }
 class LineNoise {
   constructor(props) {
     // default properties
-    let d = {};
-    d.inc = 0.001;
-    // d. inc = 0.02;
-    d.start = 0;
-    d.rot = 0;
-    // d. rotDelta = 0.0;
-    d.rotDelta = 0.2;
-    d.incAccel = 6;
-    // d. incAccel = 2;
-    Object.assign(this, d, props);
+    this.inc = 0.001;
+    // this. inc = 0.02;
+    this.start = 0;
+    this.rot = 0;
+    // this. rotDelta = 0.0;
+    this.rotDelta = 0.2;
+    this.incAccel = 6;
+    // this. incAccel = 2;
+    this.color = 255;
+    Object.assign(this, props);
+    console.log('LineNoise start', this.start, this.color);
   }
 
   draw() {
@@ -36,12 +48,10 @@ class LineNoise {
     translate(width / 2, height / 2);
     rotate(radians(this.rot));
     this.rot = this.rot + this.rotDelta;
-    stroke(255);
-    noFill();
+    stroke(this.color);
     beginShape();
     let xoff = this.start;
     for (let x = -width; x < width; x++) {
-      stroke(255);
       // let y = random(height);
       let y = (noise(xoff) - 0.5) * height;
       vertex(x, y);
