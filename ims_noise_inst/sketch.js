@@ -12,15 +12,24 @@ let colorCount = 0;
 let colorCountMax = 360;
 
 function setup() {
-  my.canv = createCanvas(windowWidth, windowHeight);
+  my.backAlpha = 10;
+  my.clearSecs = 60;
+  my.canv = createCanvas(windowWidth, windowHeight - 55);
   my.ln1 = new LineNoise();
   // my.ln2 = new LineNoise({ start: 10000, rot: 45, color: alphaRed });
   // my.ln3 = new LineNoise({ start: 30000, rot: 90, color: alphaGreen });
   // my.ln4 = new LineNoise({ start: 40000, rot: 180, color: alphaGold });
+
+  setup_fullScreenBtn();
 }
 
 function draw() {
-  background(0, 10);
+  let backAlpha = my.backAlpha;
+  let nframes = floor(frameRate() * my.clearSecs);
+  if (frameCount % nframes == 0) {
+    backAlpha = 255;
+  }
+  background(0, backAlpha);
   noFill();
 
   set_color();
@@ -85,6 +94,24 @@ class LineNoise {
 
 function windowResized() {
   resizeCanvas(windowWidth, windowHeight);
+}
+
+function setup_fullScreenBtn() {
+  my.fullScreenBtn = createButton('Full Screen');
+  my.fullScreenBtn.mousePressed(full_screen_action);
+  my.fullScreenBtn.style('font-size:42px');
+}
+
+function full_screen_action() {
+  my.fullScreenBtn.remove();
+  fullscreen(1);
+  let delay = 3000;
+  setTimeout(ui_present_window, delay);
+}
+
+function ui_present_window() {
+  resizeCanvas(windowWidth, windowHeight);
+  // init_dim();
 }
 
 // Graphing 1D Perlin Noise (1D Noise Graph)
