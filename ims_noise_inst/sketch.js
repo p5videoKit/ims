@@ -1,5 +1,5 @@
 // https://editor.p5js.org/p5name/sketches/TU9CrJ1di
-// ims noise inst
+// ims noise class
 
 let my = {};
 
